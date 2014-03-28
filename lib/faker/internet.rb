@@ -11,19 +11,19 @@ module Faker
       end
       
       def safe_email(name = nil)
-        [user_name(name), 'example.'+ %w[org com net].shuffle.first].join('@')
+        [user_name(name), 'example.'+ %w[org com net].shuffle(random: Faker::Config.prng).first].join('@')
       end
       
       def user_name(name = nil)
-        return name.scan(/\w+/).shuffle.join(%w(. _).sample).downcase if name
+        return name.scan(/\w+/).shuffle(random: Faker::Config.prng).join(%w(. _).sample(random: Faker::Config.prng)).downcase if name
         
         fix_umlauts([ 
           Proc.new { Name.first_name.gsub(/\W/, '').downcase },
           Proc.new { 
             [ Name.first_name, Name.last_name ].map {|n| 
               n.gsub(/\W/, '')
-            }.join(%w(. _).sample).downcase }
-        ].sample.call)
+            }.join(%w(. _).sample(random: Faker::Config.prng)).downcase }
+        ].sample(random: Faker::Config.prng).call)
       end
       
       def domain_name
@@ -51,15 +51,15 @@ module Faker
       
       def ip_v4_address
         ary = (2..254).to_a
-        [ary.sample,
-        ary.sample,
-        ary.sample,
-        ary.sample].join('.')
+        [ary.sample(random: Faker::Config.prng),
+        ary.sample(random: Faker::Config.prng),
+        ary.sample(random: Faker::Config.prng),
+        ary.sample(random: Faker::Config.prng)].join('.')
       end
 
       def ip_v6_address
         @@ip_v6_space ||= (0..65535).to_a
-        container = (1..8).map{ |_| @@ip_v6_space.sample }
+        container = (1..8).map{ |_| @@ip_v6_space.sample(random: Faker::Config.prng) }
         container.map{ |n| n.to_s(16) }.join(':')
       end
       
@@ -68,7 +68,7 @@ module Faker
       end
 
       def slug(words = nil, glue = nil)
-        glue ||= %w[- _ .].sample
+        glue ||= %w[- _ .].sample(random: Faker::Config.prng)
         (words || Faker::Lorem::words(2).join(' ')).gsub(' ', glue).downcase
       end
     end

@@ -3,20 +3,20 @@ module Faker
   class Lorem < Base
     class << self
       def word
-        translate('faker.lorem.words').sample
+        translate('faker.lorem.words').sample(random: Faker::Config.prng)
       end
 
       def words(num = 3, supplemental = false)
         (
           translate('faker.lorem.words') +
           (supplemental ? translate('faker.lorem.supplemental') : [])
-        ).shuffle[0, resolve(num)]
+        ).shuffle(random: Faker::Config.prng)[0, resolve(num)]
       end
 
       def characters(char_count = 255)
         return '' if char_count.respond_to?(:to_i) && char_count.to_i < 1
         char_count = resolve(char_count)
-        rand(36**char_count).to_s(36).rjust(char_count, '0').chars.to_a.shuffle.join
+        rand(36**char_count).to_s(36).rjust(char_count, '0').chars.to_a.shuffle(random: Faker::Config.prng).join
       end
 
       def sentence(word_count = 4, supplemental = false)

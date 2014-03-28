@@ -7,7 +7,7 @@ module Faker
 
       def cell_phone
         if (translation = translate(:faker)[:cell_phone]).is_a? Hash
-          numerify(translation[:formats].sample)
+          numerify(translation[:formats].sample(random: Faker::Config.prng))
         else
           numerify(fetch('phone_number.formats'))
         end

@@ -9,28 +9,28 @@ class TestArraySampleMethodCompatibility < Test::Unit::TestCase
   def test_returns_nil_or_empty_array_with_empty_source
     source = []
 
-    result = source.sample
+    result = source.sample(random: Faker::Config.prng)
     assert result.nil?
 
-    result = source.sample(1)
+    result = source.sample(1, random: Faker::Config.prng)
     assert_equal result, []
   end
 
   def test_returns_one_array_elem_without_param
     source = ['foo', 'bar']
-    result = source.sample
+    result = source.sample(random: Faker::Config.prng)
     assert source.include? result
   end
 
   def test_returns_empty_array_with_param_zero
     source = ['foo', 'bar']
-    result = source.sample(0)
+    result = source.sample(0, random: Faker::Config.prng)
     assert_equal result, []
   end
 
   def test_returns_an_array_with_integer_param
     source = ['foo', 'bar', 'baz']
-    result = source.sample(2)
+    result = source.sample(2, random: Faker::Config.prng)
     assert result.is_a? Array
     assert result.length == 2
     assert((result - source).empty?)
@@ -38,11 +38,11 @@ class TestArraySampleMethodCompatibility < Test::Unit::TestCase
 
   def test_returns_source_array_with_integer_param_equal_or_bigger_than_source_length
     source = ['foo','bar']
-    result = source.sample(2)
+    result = source.sample(2, random: Faker::Config.prng)
     assert result.is_a? Array
     assert((source.sort <=> result.sort) == 0)
 
-    result = source.sample(3)
+    result = source.sample(3, random: Faker::Config.prng)
     assert result.is_a? Array
     assert((source.sort <=> result.sort) == 0)
   end
@@ -50,7 +50,7 @@ class TestArraySampleMethodCompatibility < Test::Unit::TestCase
   def test_raises_Argument_Error_with_negative_param
     source = ['foo','bar']
     assert_raise ArgumentError do
-      source.sample(-1)
+      source.sample(-1, random: Faker::Config.prng)
     end
   end
 end
